@@ -8,10 +8,10 @@
 			"server": "YOUSSOUF\\MICROSOFTSQLSERV",
 			"database": "MaritimeDB",
 			"encrypt": "optional",
-			"trustServerCertificate": false,
-			"authenticationType": "Windows",
-			"userName": "YOUSSOUF\\abdou",
-			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkNjE4NWMyYS0yOTcyLTRiYTItYWJkNC00M2I1OWY1MWRmNzEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+			"trustServerCertificate": true,
+			"authenticationType": "SQL",
+			"userName": "maritimeadmin",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI4OGFhOGNlZS1lMTMwLTQyMDEtYmY0My1hZDJiMzY2NTZjYTIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
 		},
 		"connectVia": {
 			"referenceName": "SHIR-maritime-dev",
