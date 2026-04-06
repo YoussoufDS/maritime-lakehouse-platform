@@ -1,0 +1,33 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adf-maritime-dev"
+		},
+		"ls_sqlserver_maritime_password": {
+			"value": ""
+		},
+		"ls_adls_maritime_accountKey": {
+			"value": ""
+		},
+		"ls_sqlserver_maritime_properties_typeProperties_server": {
+			"value": "YOUSSOUF\\MICROSOFTSQLSERV"
+		},
+		"ls_sqlserver_maritime_properties_typeProperties_database": {
+			"value": "MaritimeDB"
+		},
+		"ls_sqlserver_maritime_properties_typeProperties_userName": {
+			"value": "maritimeadmin"
+		},
+		"ls_adls_maritime_properties_typeProperties_url": {
+			"value": "https://adlsmaritimedev.dfs.core.windows.net/"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}
