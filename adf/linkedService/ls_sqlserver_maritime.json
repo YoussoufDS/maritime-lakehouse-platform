@@ -1,0 +1,21 @@
+{
+	"name": "ls_sqlserver_maritime",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "SqlServer",
+		"typeProperties": {
+			"server": "YOUSSOUF\\MICROSOFTSQLSERV",
+			"database": "MaritimeDB",
+			"encrypt": "optional",
+			"trustServerCertificate": false,
+			"authenticationType": "Windows",
+			"userName": "YOUSSOUF\\abdou",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiJkNjE4NWMyYS0yOTcyLTRiYTItYWJkNC00M2I1OWY1MWRmNzEiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "SHIR-maritime-dev",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
