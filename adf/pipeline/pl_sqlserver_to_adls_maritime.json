@@ -1,0 +1,84 @@
+{
+	"name": "pl_sqlserver_to_adls_maritime",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@json('[\n  {\"table\":\"vessels\",\"folder\":\"erp/fleet/vessels\"},\n  {\"table\":\"vessel_classes\",\"folder\":\"erp/fleet/vessel_classes\"},\n  {\"table\":\"ports\",\"folder\":\"erp/portops/ports\"},\n  {\"table\":\"terminals\",\"folder\":\"erp/portops/terminals\"},\n  {\"table\":\"berths\",\"folder\":\"erp/portops/berths\"},\n  {\"table\":\"voyages\",\"folder\":\"erp/navigation/voyages\"},\n  {\"table\":\"port_calls\",\"folder\":\"erp/navigation/port_calls\"},\n  {\"table\":\"cargo_types\",\"folder\":\"erp/cargo/cargo_types\"},\n  {\"table\":\"cargo_orders\",\"folder\":\"erp/cargo/cargo_orders\"},\n  {\"table\":\"cargo_manifests\",\"folder\":\"erp/cargo/cargo_manifests\"},\n  {\"table\":\"clients\",\"folder\":\"erp/commercial/clients\"},\n  {\"table\":\"contracts\",\"folder\":\"erp/commercial/contracts\"},\n  {\"table\":\"seafarers\",\"folder\":\"erp/crewing/seafarers\"},\n  {\"table\":\"crew_assignments\",\"folder\":\"erp/crewing/crew_assignments\"},\n  {\"table\":\"fuel_grades\",\"folder\":\"erp/fuelops/fuel_grades\"},\n  {\"table\":\"bunkering_events\",\"folder\":\"erp/fuelops/bunkering_events\"}\n]')",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy data",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "SqlServerSource",
+									"queryTimeout": "01:40:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "ParquetSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "ParquetWriteSettings"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "ds_sqlserver_maritime",
+									"type": "DatasetReference",
+									"parameters": {
+										"table_name": {
+											"value": "@item().table",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "ds_adls_parquet_landing",
+									"type": "DatasetReference",
+									"parameters": {
+										"folder_path": {
+											"value": "@item().folder",
+											"type": "Expression"
+										}
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}
