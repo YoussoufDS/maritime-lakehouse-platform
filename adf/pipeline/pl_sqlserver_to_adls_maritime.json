@@ -28,6 +28,10 @@
 							"typeProperties": {
 								"source": {
 									"type": "SqlServerSource",
+									"sqlReaderQuery": {
+										"value": "@concat('SELECT * FROM dbo.', item().table)",
+										"type": "Expression"
+									},
 									"queryTimeout": "01:40:00",
 									"partitionOption": "None"
 								},
