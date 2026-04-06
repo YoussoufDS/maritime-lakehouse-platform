@@ -1,0 +1,23 @@
+{
+	"name": "ds_sqlserver_maritime",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver_maritime",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"table_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "SqlServerTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().table_name",
+				"type": "Expression"
+			}
+		}
+	}
+}
