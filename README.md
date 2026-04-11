@@ -295,8 +295,6 @@ python data_generators/generate_weather_json.py
 
 ---
 
-
-
 ---
 
 <div align="center">
