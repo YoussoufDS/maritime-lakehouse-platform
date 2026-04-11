@@ -5,7 +5,7 @@
 ### End-to-end Azure Data Engineering · Medallion Architecture
 
 [![Azure](https://img.shields.io/badge/Azure-Databricks-FF3621?style=flat-square&logo=apachedatabricks&logoColor=white)](https://azure.microsoft.com)
-[![Delta Lake](https://img.shields.io/badge/Delta-Lake-00ADD8?style=flat-square&logo=delta&logoColor=white)](https://delta.io)
+[![Delta Lake](https://img.shields.io/badge/Delta-Lake-00ADD8?style=flat-square&logoColor=white)](https://delta.io)
 [![Unity Catalog](https://img.shields.io/badge/Unity-Catalog-1B3A6B?style=flat-square&logo=databricks&logoColor=white)](https://databricks.com)
 [![Power BI](https://img.shields.io/badge/Power-BI-F2C811?style=flat-square&logo=powerbi&logoColor=black)](https://powerbi.microsoft.com)
 [![Great Expectations](https://img.shields.io/badge/Great-Expectations-FF6B6B?style=flat-square)](https://greatexpectations.io)
@@ -14,12 +14,8 @@
 <br/>
 
 > A production-grade maritime logistics data platform built on Azure —
-> ingesting, transforming, and governing 870K+ rows across 8 business domains
-> with 100/100 data quality checks and full lineage tracking.
-
-<br/>
-
-![Architecture](docs/architecture.png)
+> ingesting, transforming, and governing **870K+ rows** across **8 business domains**
+> with **100/100 data quality checks** and full lineage tracking.
 
 </div>
 
@@ -27,88 +23,25 @@
 
 ## 📐 Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│  SOURCES          INGESTION         STORAGE            PROCESSING            │
-│                                                                               │
-│  SQL Server  ──→  ADF + SHIR   ──→  landing/erp/  ──→  Bronze Layer         │
-│  CSV Files   ──→  Python       ──→  landing/files/ ──→  Silver Layer  ──→  Gold │
-│  JSON Files  ──→  Upload       ──→                                           │
-│  Event Hubs  ──→  Streaming    ──→  landing/stream/     (Phase 5)            │
-│                                                                               │
-│  ─────────────────────────────────────────────────────────────────────────── │
-│  GOVERNANCE : Unity Catalog · Microsoft Purview · Azure Key Vault            │
-│  QUALITY    : Delta Constraints · Great Expectations · 100/100 checks        │
-│  SERVING    : Power BI DirectQuery · 6 Dashboards                            │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
+![Architecture](docs/Maritime_diagram_project_drawio.png)
 
 ---
 
 ## ⚡ Tech Stack
 
-<table>
-<tr>
-<td><b>Layer</b></td>
-<td><b>Technology</b></td>
-<td><b>Purpose</b></td>
-</tr>
-<tr>
-<td>Sources</td>
-<td>SQL Server 2019 · CSV · JSON · Event Hubs</td>
-<td>3 source types · 8 business domains</td>
-</tr>
-<tr>
-<td>Ingestion</td>
-<td>Azure Data Factory + SHIR · Python</td>
-<td>Batch + file ingestion</td>
-</tr>
-<tr>
-<td>Storage</td>
-<td>ADLS Gen2 — adlsmaritimedev</td>
-<td>Landing · Bronze · Silver · Gold</td>
-</tr>
-<tr>
-<td>Processing</td>
-<td>Azure Databricks · Spark 3.5</td>
-<td>Medallion transformation pipeline</td>
-</tr>
-<tr>
-<td>Table Format</td>
-<td>Delta Lake</td>
-<td>ACID · Time Travel · Schema Evolution</td>
-</tr>
-<tr>
-<td>Governance</td>
-<td>Unity Catalog · Microsoft Purview</td>
-<td>Lineage · RBAC · Glossary · Scanning</td>
-</tr>
-<tr>
-<td>Data Quality</td>
-<td>Delta Constraints · Great Expectations</td>
-<td>100/100 checks — Silver layer</td>
-</tr>
-<tr>
-<td>Secrets</td>
-<td>Azure Key Vault Secret Scope</td>
-<td>Zero credentials in code</td>
-</tr>
-<tr>
-<td>Orchestration</td>
-<td>Databricks Workflow</td>
-<td>5 tasks DAG · Daily 06:00 UTC</td>
-</tr>
-<tr>
-<td>Serving</td>
-<td>Power BI Desktop</td>
-<td>6 dashboards · DirectQuery</td>
-</tr>
-<tr>
-<td>CI/CD</td>
-<td>GitHub Actions</td>
-<td>Automated deployment</td>
-</tr>
-</table>
+| Layer | Technology | Purpose |
+|---|---|---|
+| Sources | SQL Server 2019 · CSV · JSON · Event Hubs | 3 source types · 8 business domains |
+| Ingestion | Azure Data Factory + SHIR · Python | Batch + file ingestion |
+| Storage | ADLS Gen2 — adlsmaritimedev | Landing · Bronze · Silver · Gold |
+| Processing | Azure Databricks · Spark 3.5 | Medallion transformation pipeline |
+| Table Format | Delta Lake | ACID · Time Travel · Schema Evolution |
+| Governance | Unity Catalog · Microsoft Purview | Lineage · RBAC · Glossary · Scanning |
+| Data Quality | Delta Constraints · Great Expectations | 100/100 checks — Silver layer |
+| Secrets | Azure Key Vault Secret Scope | Zero credentials in code |
+| Orchestration | Databricks Workflow | 5 tasks DAG · Daily 06:00 UTC |
+| Serving | Power BI Desktop | 6 dashboards · DirectQuery |
+| CI/CD | GitHub Actions | Automated deployment |
 
 ---
 
@@ -122,6 +55,42 @@
 | 🔵 Silver Files | 3 | 203,482 | Normalized · Enriched · DQ checked |
 | 🟡 Gold | 9 | 242,788 | Star schema · Data products |
 | **Total** | **47** | **872,784** | |
+
+---
+
+## 🗄️ Source Data — SQL Server 2019
+
+16 tables · 116,222 rows ingested via ADF + Self-Hosted Integration Runtime
+
+![SQL Server](docs/Capture%20d'%C3%A9cran%202026-04-06%20155117.png)
+
+---
+
+## 📡 Streaming — Azure Event Hubs
+
+2 active streams · 29,430 messages · 13.59 MB ingested over 7 days
+
+![Event Hubs](docs/Capture%20d'%C3%A9cran%202026-04-06%20160115.png)
+
+### AIS Positions Stream — 630 events
+
+![AIS Stream](docs/Capture%20d'%C3%A9cran%202026-04-06%20160432.png)
+
+### Engine Metrics Stream — 120 events
+
+![Engine Stream](docs/Capture%20d'%C3%A9cran%202026-04-06%20160540.png)
+
+---
+
+## 🗂️ Landing Zone — ADLS Gen2
+
+### Container structure — 3 folders
+
+![ADLS Landing](docs/Capture%20d'%C3%A9cran%202026-04-11%20171231.png)
+
+### ERP domain organization — 7 business domains
+
+![ADLS ERP](docs/Capture%20d'%C3%A9cran%202026-04-11%20171528.png)
 
 ---
 
@@ -151,7 +120,7 @@ Two-layer enforcement strategy across all 19 Silver tables:
 ```
 Layer 1 — Delta CHECK Constraints (hard enforcement)
   → Blocks invalid writes at table level
-  → Examples: vessel_year >= 1900, quantity_mt > 0,
+  → Examples: build_year >= 1900, quantity_mt > 0,
               latitude BETWEEN -90 AND 90
 
 Layer 2 — Great Expectations (statistical validation)
@@ -250,15 +219,9 @@ Duration : ~16 min end-to-end
 
 ## 💰 Cost Management
 
-| Resource | Cost/month |
-|---|---|
-| Azure Databricks (DS3_v2) | ~$25 |
-| ADLS Gen2 | ~$2 |
-| Azure Data Factory | ~$3 |
-| Event Hubs | ~$2 |
-| **Total** | **~$32** |
+![Budget](docs/Capture%20d'%C3%A9cran%202026-04-11%20171603.png)
 
-> Budget alert configured at **$70/month** · Current spend: **$36.68 USD**
+> Budget: **$70/month** · Current spend: **$36.68 USD** · 4 alert thresholds (50% · 75% · 90% · 100%)
 
 ---
 
@@ -267,28 +230,29 @@ Duration : ~16 min end-to-end
 ```
 maritime-lakehouse-platform/
 ├── 📓 databricks/
-│   ├── config.ipynb                 # Global vars + ADLS auth
+│   ├── config.ipynb
 │   ├── bronze/
-│   │   ├── bronze_erp.ipynb         # 16 ERP tables from SQL Server
-│   │   ├── bronze_files.ipynb       # CSV fuelops + JSON weather
-│   │   └── bronze_streaming.ipynb  # Event Hubs AIS + engine (Phase 5)
+│   │   ├── bronze_erp.py
+│   │   ├── bronze_files.py
+│   │   └── bronze_streaming.py
 │   ├── silver/
-│   │   ├── silver_erp.ipynb         # Clean + type + DQ · 16 tables
-│   │   └── silver_files.ipynb       # Normalize + enrich · 3 tables
+│   │   ├── silver_erp.py
+│   │   └── silver_files.py
 │   └── gold/
-│       └── gold.ipynb               # Star schema · 9 data products
+│       └── gold.py
 ├── 🐍 data_generators/
-│   ├── generate_maritime_data.py    # SQL Server synthetic data
-│   ├── generate_fuelops_csv.py      # CSV fuelops generator
-│   ├── generate_weather_json.py     # JSON weather generator
-│   ├── producer_ais.py              # AIS Event Hubs producer
-│   └── producer_engine_metrics.py  # Engine metrics producer
+│   ├── generate_maritime_data.py
+│   ├── generate_fuelops_csv.py
+│   ├── generate_weather_json.py
+│   ├── producer_ais.py
+│   └── producer_engine_metrics.py
 ├── 🔧 adf/
-│   ├── pipeline/                    # pl_sqlserver_to_adls_maritime
-│   ├── dataset/                     # ds_sqlserver + ds_adls_parquet
-│   └── linkedService/              # ls_sqlserver + ls_adls
+│   ├── pipeline/
+│   ├── dataset/
+│   └── linkedService/
 ├── 📐 docs/
-│   └── architecture.png
+│   ├── Maritime_diagram_project_drawio.png
+│   └── screenshots/
 ├── README.md
 ├── requirements.txt
 └── .gitignore
@@ -322,23 +286,22 @@ python data_generators/generate_maritime_data.py
 python data_generators/generate_fuelops_csv.py
 python data_generators/generate_weather_json.py
 
-# 2. Upload files to ADLS
-python data_generators/upload_to_adls.py
-
-# 3. Run ADF pipeline
+# 2. Run ADF pipeline
 # → adf-maritime-dev → pl_sqlserver_to_adls_maritime → Trigger now
 
-# 4. Run Databricks Workflow
+# 3. Run Databricks Workflow
 # → dbw-maritime-dev → Workflows → maritime_lakehouse_pipeline → Run now
 ```
 
 ---
 
+
+
 ---
 
-## 👤 Author
-
 <div align="center">
+
+## 👤 Author
 
 **Youssouf Abdouramane**
 
